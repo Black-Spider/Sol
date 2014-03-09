@@ -10,7 +10,6 @@
 		DD3965BC17F8DE2A00977422 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3965BB17F8DE2A00977422 /* UIImage+ImageEffects.m */; };
 		DD43184418C5D2540022E87E /* Resources.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD43184318C5D2540022E87E /* Resources.xcassets */; };
 		DD46272A17ADC3A1000A6A33 /* SOLWeatherView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD46272917ADC3A1000A6A33 /* SOLWeatherView.m */; };
-		DD46272D17ADC3E6000A6A33 /* SOLWeatherData.m in Sources */ = {isa = PBXBuildFile; fileRef = DD46272C17ADC3E6000A6A33 /* SOLWeatherData.m */; };
 		DD4F967517A8994300E0E7D0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4F967417A8994300E0E7D0 /* Foundation.framework */; };
 		DD4F967717A8994300E0E7D0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4F967617A8994300E0E7D0 /* CoreGraphics.framework */; };
 		DD4F967917A8994300E0E7D0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4F967817A8994300E0E7D0 /* UIKit.framework */; };
@@ -26,7 +25,6 @@
 		DD548DE717A8ADCC00E08E29 /* SOLPagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD548DE617A8ADCC00E08E29 /* SOLPagingScrollView.m */; };
 		DD677B8D17EEE5AC0078F41A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD677B8C17EEE5AC0078F41A /* MapKit.framework */; };
 		DD79691218B61631009ADE2A /* API_KEY in Resources */ = {isa = PBXBuildFile; fileRef = DD79691118B61631009ADE2A /* API_KEY */; };
-		DD9388E617B6D898004C5F42 /* NSString+Substring.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9388E517B6D898004C5F42 /* NSString+Substring.m */; };
 		DD9388F017B6DDA8004C5F42 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD0C344117B517950024AD9A /* SystemConfiguration.framework */; };
 		DD9388F117B6DDB2004C5F42 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD0C344317B5179C0024AD9A /* MobileCoreServices.framework */; };
 		DD93A81B17FA9C12006DD1BC /* Climacons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD93A81A17FA9C12006DD1BC /* Climacons.ttf */; };
@@ -35,7 +33,7 @@
 		DDB7B8E517ECF59100857D15 /* SOLAddLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB7B8E417ECF59100857D15 /* SOLAddLocationViewController.m */; };
 		DDB7B8EB17ED516500857D15 /* SOLSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB7B8EA17ED516500857D15 /* SOLSettingsViewController.m */; };
 		DDBFDDCA17B23F3F002A886D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBFDDC917B23F3F002A886D /* QuartzCore.framework */; };
-		DDBFDDCD17B286B7002A886D /* SOLWundergroundDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = DDBFDDCC17B286B7002A886D /* SOLWundergroundDownloader.m */; };
+		DDF02B3418CCEA8900C7D012 /* CZWeatherKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDF02B3318CCEA8900C7D012 /* CZWeatherKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,8 +54,6 @@
 		DD43184318C5D2540022E87E /* Resources.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources.xcassets; sourceTree = "<group>"; };
 		DD46272817ADC3A1000A6A33 /* SOLWeatherView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOLWeatherView.h; path = Views/SOLWeatherView.h; sourceTree = "<group>"; };
 		DD46272917ADC3A1000A6A33 /* SOLWeatherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLWeatherView.m; path = Views/SOLWeatherView.m; sourceTree = "<group>"; };
-		DD46272B17ADC3E6000A6A33 /* SOLWeatherData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOLWeatherData.h; path = Model/SOLWeatherData.h; sourceTree = "<group>"; };
-		DD46272C17ADC3E6000A6A33 /* SOLWeatherData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLWeatherData.m; path = Model/SOLWeatherData.m; sourceTree = "<group>"; };
 		DD4F967117A8994300E0E7D0 /* Sol.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sol.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD4F967417A8994300E0E7D0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		DD4F967617A8994300E0E7D0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -79,10 +75,7 @@
 		DD548DE617A8ADCC00E08E29 /* SOLPagingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLPagingScrollView.m; path = Views/SOLPagingScrollView.m; sourceTree = "<group>"; };
 		DD677B8C17EEE5AC0078F41A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		DD79691118B61631009ADE2A /* API_KEY */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = API_KEY; sourceTree = "<group>"; };
-		DD8AA01517D52B2E00D4F7BA /* Climacons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Climacons.h; path = Model/Climacons.h; sourceTree = "<group>"; };
 		DD8AA01817D533BA00D4F7BA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
-		DD9388E417B6D898004C5F42 /* NSString+Substring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Substring.h"; path = "Model/Categories/NSString+Substring.h"; sourceTree = "<group>"; };
-		DD9388E517B6D898004C5F42 /* NSString+Substring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Substring.m"; path = "Model/Categories/NSString+Substring.m"; sourceTree = "<group>"; };
 		DD93A81A17FA9C12006DD1BC /* Climacons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Climacons.ttf; path = Resources/Fonts/Climacons.ttf; sourceTree = "<group>"; };
 		DD93A82417FA9D28006DD1BC /* CZDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CZDebug.h; path = Model/CZDebug.h; sourceTree = "<group>"; };
 		DDA08E9F17B81135006AC675 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -93,8 +86,7 @@
 		DDB7B8E917ED516500857D15 /* SOLSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOLSettingsViewController.h; path = ViewControllers/SOLSettingsViewController.h; sourceTree = "<group>"; };
 		DDB7B8EA17ED516500857D15 /* SOLSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLSettingsViewController.m; path = ViewControllers/SOLSettingsViewController.m; sourceTree = "<group>"; };
 		DDBFDDC917B23F3F002A886D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		DDBFDDCB17B286B7002A886D /* SOLWundergroundDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOLWundergroundDownloader.h; path = Model/SOLWundergroundDownloader.h; sourceTree = "<group>"; };
-		DDBFDDCC17B286B7002A886D /* SOLWundergroundDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLWundergroundDownloader.m; path = Model/SOLWundergroundDownloader.m; sourceTree = "<group>"; };
+		DDF02B3318CCEA8900C7D012 /* CZWeatherKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CZWeatherKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +96,7 @@
 			files = (
 				DD677B8D17EEE5AC0078F41A /* MapKit.framework in Frameworks */,
 				DDA08EA017B81135006AC675 /* CoreLocation.framework in Frameworks */,
+				DDF02B3418CCEA8900C7D012 /* CZWeatherKit.framework in Frameworks */,
 				DD9388F117B6DDB2004C5F42 /* MobileCoreServices.framework in Frameworks */,
 				DD9388F017B6DDA8004C5F42 /* SystemConfiguration.framework in Frameworks */,
 				DDBFDDCA17B23F3F002A886D /* QuartzCore.framework in Frameworks */,
@@ -149,6 +142,7 @@
 		DD4F967317A8994300E0E7D0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DDF02B3318CCEA8900C7D012 /* CZWeatherKit.framework */,
 				DD677B8C17EEE5AC0078F41A /* MapKit.framework */,
 				DD8AA01817D533BA00D4F7BA /* CoreText.framework */,
 				DDA08E9F17B81135006AC675 /* CoreLocation.framework */,
@@ -231,13 +225,8 @@
 		DD548DDF17A8A92300E08E29 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				DDB7B85617EC913300857D15 /* Climacons */,
 				DDB7B85417EC877000857D15 /* Debug */,
 				DD548DE817A9D5AB00E08E29 /* Categories */,
-				DD46272B17ADC3E6000A6A33 /* SOLWeatherData.h */,
-				DD46272C17ADC3E6000A6A33 /* SOLWeatherData.m */,
-				DDBFDDCB17B286B7002A886D /* SOLWundergroundDownloader.h */,
-				DDBFDDCC17B286B7002A886D /* SOLWundergroundDownloader.m */,
 				DDB7B85717ECD17A00857D15 /* SOLStateManager.h */,
 				DDB7B85817ECD17A00857D15 /* SOLStateManager.m */,
 			);
@@ -260,8 +249,6 @@
 			children = (
 				DD3965BA17F8DE2A00977422 /* UIImage+ImageEffects.h */,
 				DD3965BB17F8DE2A00977422 /* UIImage+ImageEffects.m */,
-				DD9388E417B6D898004C5F42 /* NSString+Substring.h */,
-				DD9388E517B6D898004C5F42 /* NSString+Substring.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -280,14 +267,6 @@
 				DD93A82417FA9D28006DD1BC /* CZDebug.h */,
 			);
 			name = Debug;
-			sourceTree = "<group>";
-		};
-		DDB7B85617EC913300857D15 /* Climacons */ = {
-			isa = PBXGroup;
-			children = (
-				DD8AA01517D52B2E00D4F7BA /* Climacons.h */,
-			);
-			name = Climacons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -396,12 +375,9 @@
 				DDB7B85917ECD17A00857D15 /* SOLStateManager.m in Sources */,
 				DD46272A17ADC3A1000A6A33 /* SOLWeatherView.m in Sources */,
 				DDB7B8E517ECF59100857D15 /* SOLAddLocationViewController.m in Sources */,
-				DD9388E617B6D898004C5F42 /* NSString+Substring.m in Sources */,
-				DD46272D17ADC3E6000A6A33 /* SOLWeatherData.m in Sources */,
 				DD4F968117A8994300E0E7D0 /* main.m in Sources */,
 				DD548DE717A8ADCC00E08E29 /* SOLPagingScrollView.m in Sources */,
 				DD4F968517A8994300E0E7D0 /* SOLAppDelegate.m in Sources */,
-				DDBFDDCD17B286B7002A886D /* SOLWundergroundDownloader.m in Sources */,
 				DDB7B8EB17ED516500857D15 /* SOLSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -522,6 +498,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/Comyar/Dropbox/Development/Sol/Sol,
+					/Users/Comyar/Dropbox/Development/Sol/Sol/Sol,
+					"/Users/Comyar/Dropbox/Development/CZWeatherKit/CZWeatherKit/Build/Products/Debug-iphonesimulator",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sol/Sol-Prefix.pch";
@@ -544,6 +522,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/Comyar/Dropbox/Development/Sol/Sol,
+					/Users/Comyar/Dropbox/Development/Sol/Sol/Sol,
+					"/Users/Comyar/Dropbox/Development/CZWeatherKit/CZWeatherKit/Build/Products/Debug-iphonesimulator",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Sol/Sol-Prefix.pch";
