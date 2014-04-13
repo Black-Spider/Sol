@@ -23,33 +23,12 @@
 #import "UIImage+ImageEffects.h"
 
 
-#pragma mark - Constants
-
-// Minimum time between each weather data update
-static const CGFloat    kMinTimeBetweenUpdates  = 3600.0;
-
-// Maximum number of weather views allowed
-static const NSInteger  kMaxNumWeatherViews     = 5;
-
-// Tag for the local weather view
-static const NSInteger  kLocalWeatherViewTag    = 0;
-
-// Name of the default gradient image file
-static NSString * const kDefaultBackgroundGradientName = @"gradient5";
-
-
 #pragma mark - SOLMainViewController Class Extension
 
 @interface SOLMainViewController ()
 
 // Redefinition of location manager
 @property (strong, nonatomic) CLLocationManager     *locationManager;
-
-// Dictionary of all weather data being managed by the app
-@property (strong, nonatomic) NSMutableDictionary   *weatherData;
-
-// Ordered-List of weather tags
-@property (strong, nonatomic) NSMutableArray        *weatherTags;
 
 //
 @property (assign, nonatomic) BOOL                  isScrolling;
@@ -83,12 +62,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 // Button used to transition to the add location view controller
 @property (strong, nonatomic) UIButton            *addLocationButton;
 
-// Page control displaying the number of pages managed by the paging scroll view
-@property (strong, nonatomic) UIPageControl       *pageControl;
-
-// Paging scroll view to manage weather views
-@property (strong, nonatomic) SOLPagingScrollView *pagingScrollView;
-
 // Dark, semi-transparent view to sit above the homescreen
 @property (strong, nonatomic) UIView              *darkenedBackgroundView;
 
@@ -106,22 +79,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
         self.modalTransitionStyle   = UIModalTransitionStyleCoverVertical;
         self.modalPresentationStyle = UIModalPresentationCurrentContext;
         
-        // Initialize the weather data dictionary with saved data, if it exists
-        NSDictionary *savedWeatherData = [SOLStateManager weatherData];
-        if(savedWeatherData) {
-            self.weatherData = [NSMutableDictionary dictionaryWithDictionary:savedWeatherData];
-        } else {
-            self.weatherData = [NSMutableDictionary dictionaryWithCapacity:5];
-        }
-        
-        // Initialize the weather tags array with saved data, if it exists
-        NSArray *savedWeatherTags = [SOLStateManager weatherTags];
-        if(savedWeatherTags) {
-            self.weatherTags = [NSMutableArray arrayWithArray:savedWeatherTags];
-        } else {
-            self.weatherTags = [NSMutableArray arrayWithCapacity:kMaxNumWeatherViews];
-        }
-        
+                
         // Initialize the location manager and start updating the user's current location
         self.locationManager = ({
             CLLocationManager *locationManager = [CLLocationManager new];
@@ -247,7 +205,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 {
     SOLWeatherView *localWeatherView = ({
         SOLWeatherView *weatherView = [[SOLWeatherView alloc]initWithFrame:self.view.bounds];
-        weatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDefaultBackgroundGradientName]];
+        
         weatherView.tag = kLocalWeatherViewTag;
         weatherView.delegate = self;
         weatherView.local = YES;
@@ -330,7 +288,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
             
             // Only update if the minimum time for updates has passed
             if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMinTimeBetweenUpdates || !weatherView.hasData) {
-                CZLog(@"SOLMainViewController", @"Updating Weather Data for %@, Time Since: %f", weatherData.placemark.locality, [[NSDate date]timeIntervalSinceDate:weatherData.timestamp]);
                 
                 // If the weather view is already showing data, we need to move the activity indicator
                 if(weatherView.hasData) {
@@ -352,8 +309,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
                     [self setBlurredOverlayImage];
                 }];
                 
-            } else {
-                CZLog(@"SOLMainViewController", @"Not Updating Weather Data for %@, Time Since: %f", weatherData.placemark.locality, [[NSDate date]timeIntervalSinceDate:weatherData.timestamp]);
             }
         }
     }
