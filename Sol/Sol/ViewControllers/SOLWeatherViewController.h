@@ -6,8 +6,11 @@
 //  Copyright (c) 2014 Comyar Zaheri. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
+@import CoreLocation.CLLocation;
 
 @interface SOLWeatherViewController : UIViewController
+
+@property (nonatomic) CLLocation *location;
 
 @end

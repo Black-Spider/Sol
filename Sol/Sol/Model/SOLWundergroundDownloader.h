@@ -8,7 +8,7 @@
 
 @class SOLWeatherData;
 
-/// Block Definition
+// Block Definition
 typedef void (^SOLWeatherDataDownloadCompletion)(SOLWeatherData *data, NSError *error);
 
 /**
@@ -18,9 +18,9 @@ typedef void (^SOLWeatherDataDownloadCompletion)(SOLWeatherData *data, NSError *
 @interface SOLWundergroundDownloader : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 
-/////////////////////////////////////////////////////////////////////////////
-/// @name Initializing a Wunderground Downloader
-/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+// @name Initializing a Wunderground Downloader
+////////////////////////////////////////////////////
 
 /**
  Returns a shared instance of SOLWundergroundDownloader
@@ -29,24 +29,15 @@ typedef void (^SOLWeatherDataDownloadCompletion)(SOLWeatherData *data, NSError *
 + (SOLWundergroundDownloader *)sharedDownloader;
 
 
-/////////////////////////////////////////////////////////////////////////////
-/// @name Using a Wunderground Downloader
-/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+// @name Using a Wunderground Downloader
+////////////////////////////////////////////////////
 
 /**
  Queries the Wunderground Weather API and downloads weather data for the given location
  @param location    Location to download weather data for
- @param tag         Tag of the weather view expecting to receive the downloaded weather data
  @param completion  Block that returns a SOLWeatherData object on success, and nil on failure
  */
-- (void)dataForLocation:(CLLocation *)location withTag:(NSInteger)tag completion:(SOLWeatherDataDownloadCompletion)completion;
-
-/**
- Queries the Wunderground Weather API and downloads weather data for the given location
- @param placemark   Placemark to download weather data for
- @param tag         Tag of the weather view expecting to receive the downloaded weather data
- @param completion  Block that returns a SOLWeatherData object on success, and nil on failure
- */
-- (void)dataForPlacemark:(CLPlacemark *)placemark withTag:(NSInteger)tag completion:(SOLWeatherDataDownloadCompletion)completion;
+- (void)dataForLocation:(CLLocation *)location completion:(SOLWeatherDataDownloadCompletion)completion;
 
 @end

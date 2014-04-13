@@ -8,14 +8,18 @@
 
 #import "SOLAppDelegate.h"
 #import "SOLWeatherDataSource.h"
+#import "SOLAddLocationViewController.h"
+#import "SOLSettingsViewController.h"
 
 #pragma mark - SOLAppDelegate Class Extension
 
 @interface SOLAppDelegate ()
 
-// The initial view controller presented to the user
-@property (nonatomic) SOLMainViewController *mainViewController;
+//
+@property (nonatomic) SOLSettingsViewController     *settingsViewController;
 
+//
+@property (nonatomic) SOLAddLocationViewController  *addLocationViewController;
 
 @end
 
@@ -28,14 +32,14 @@
 {
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
     
     UIPageViewController *pageViewController = [[UIPageViewController alloc]initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
-    pageViewController.dataSource =
+    pageViewController.dataSource = [SOLWeatherDataSource sharedWeatherDataSource];
     
     // Set our window's root view controller and make the app window visible
-    self.window.rootViewController = self.mainViewController;
+    self.window.rootViewController = pageViewController;
     [self.window makeKeyAndVisible];
     
     return YES;
@@ -43,12 +47,12 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-
+    [[SOLWeatherDataSource sharedWeatherDataSource].locationManager stopUpdatingLocation];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-
+    [[SOLWeatherDataSource sharedWeatherDataSource].locationManager startUpdatingLocation];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

@@ -22,7 +22,6 @@
 		DD4F969017A8994300E0E7D0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD4F967817A8994300E0E7D0 /* UIKit.framework */; };
 		DD4F969817A8994300E0E7D0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DD4F969617A8994300E0E7D0 /* InfoPlist.strings */; };
 		DD4F969A17A8994300E0E7D0 /* SolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4F969917A8994300E0E7D0 /* SolTests.m */; };
-		DD548DE317A8A95800E08E29 /* SOLMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD548DE217A8A95800E08E29 /* SOLMainViewController.m */; };
 		DD677B8D17EEE5AC0078F41A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD677B8C17EEE5AC0078F41A /* MapKit.framework */; };
 		DD9388E617B6D898004C5F42 /* NSString+Substring.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9388E517B6D898004C5F42 /* NSString+Substring.m */; };
 		DD9388F017B6DDA8004C5F42 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD0C344117B517950024AD9A /* SystemConfiguration.framework */; };
@@ -74,8 +73,6 @@
 		DD4F969517A8994300E0E7D0 /* SolTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SolTests-Info.plist"; sourceTree = "<group>"; };
 		DD4F969717A8994300E0E7D0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		DD4F969917A8994300E0E7D0 /* SolTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SolTests.m; sourceTree = "<group>"; };
-		DD548DE117A8A95800E08E29 /* SOLMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOLMainViewController.h; path = ViewControllers/SOLMainViewController.h; sourceTree = "<group>"; };
-		DD548DE217A8A95800E08E29 /* SOLMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLMainViewController.m; path = ViewControllers/SOLMainViewController.m; sourceTree = "<group>"; };
 		DD677B8C17EEE5AC0078F41A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		DD8AA01517D52B2E00D4F7BA /* Climacons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Climacons.h; path = Model/Climacons.h; sourceTree = "<group>"; };
 		DD8AA01817D533BA00D4F7BA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -220,8 +217,6 @@
 		DD548DDE17A8A91B00E08E29 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				DD548DE117A8A95800E08E29 /* SOLMainViewController.h */,
-				DD548DE217A8A95800E08E29 /* SOLMainViewController.m */,
 				DDB7B8E317ECF59100857D15 /* SOLAddLocationViewController.h */,
 				DDB7B8E417ECF59100857D15 /* SOLAddLocationViewController.m */,
 				DDB7B8E917ED516500857D15 /* SOLSettingsViewController.h */,
@@ -394,7 +389,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD548DE317A8A95800E08E29 /* SOLMainViewController.m in Sources */,
 				DD3965BC17F8DE2A00977422 /* UIImage+ImageEffects.m in Sources */,
 				DDB7B85917ECD17A00857D15 /* SOLStateManager.m in Sources */,
 				DD46272A17ADC3A1000A6A33 /* SOLWeatherView.m in Sources */,

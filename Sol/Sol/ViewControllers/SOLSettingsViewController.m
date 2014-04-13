@@ -140,7 +140,6 @@
 
 - (void)doneButtonPressed
 {
-    CZLog(@"SOLSettingsViewController", @"Done Button Pressed");
     [self.delegate dismissSettingsViewController];
 }
 
@@ -148,7 +147,6 @@
 
 - (void)temperatureControlChanged:(UISegmentedControl *)control
 {
-    CZLog(@"SOLSettingsViewController", @"Temperature Control Value Changed");
     SOLTemperatureScale scale = [control selectedSegmentIndex];
     [SOLStateManager setTemperatureScale:scale];
     [self.delegate didChangeTemperatureScale:scale];

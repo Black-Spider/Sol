@@ -8,14 +8,19 @@
 
 @import UIKit;
 @import Foundation;
+@import CoreLocation;
+
+@class SOLWeatherData;
 @class SOLWeatherViewController;
 
-@interface SOLWeatherDataSource : NSObject <UIPageViewControllerDataSource>
+typedef void (^SOLWeatherDataSourceCompletion)(SOLWeatherData *weatherData);
+
+@interface SOLWeatherDataSource : NSObject <UIPageViewControllerDataSource, CLLocationManagerDelegate>
 
 + (SOLWeatherDataSource *)sharedWeatherDataSource;
 
+- (void)createWeatherViewControllerForLocation:(CLLocation *)location;
 
-- (void)updateWeatherDataForWeatherViewController:(SOLWeatherViewController *)weatherViewController
-                                       completion:(void (^)(BOOL success))completion;
+@property (nonatomic, readonly) CLLocationManager *locationManager;
 
 @end
