@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 Comyar Zaheri. All rights reserved.
 //
 
-#import "SOLWundergroundDownloader.h"
+
 #import "SOLAddLocationViewController.h"
 #import "SOLSettingsViewController.h"
+#import "SOLWundergroundDownloader.h"
 #import "SOLWeatherView.h"
 
 @interface SOLMainViewController : UIViewController <UIScrollViewDelegate, CLLocationManagerDelegate, SOLAddLocationViewControllerDelegate, SOLSettingsViewControllerDelegate, SOLWeatherViewDelegate>

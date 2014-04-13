@@ -43,9 +43,6 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Make sure any changes to userdefaults are saved to disk
-    [[NSUserDefaults standardUserDefaults]synchronize];
-    
     // Stop updating the user's location
     [self.mainViewController.locationManager stopUpdatingLocation];
 }

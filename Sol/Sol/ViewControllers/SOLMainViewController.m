@@ -37,11 +37,6 @@ static const NSInteger  kLocalWeatherViewTag    = 0;
 // Name of the default gradient image file
 static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 
-#define kMIN_TIME_SINCE_UPDATE          3600
-#define kMAX_NUM_WEATHER_VIEWS          5
-#define kLOCAL_WEATHER_VIEW_TAG         0
-#define kDEFAULT_BACKGROUND_GRADIENT    @"gradient5"
-
 
 #pragma mark - SOLMainViewController Class Extension
 
@@ -55,9 +50,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 
 // Ordered-List of weather tags
 @property (strong, nonatomic) NSMutableArray        *weatherTags;
-
-// Formats weather data timestamps
-@property (strong, nonatomic) NSDateFormatter       *dateFormatter;
 
 @property (assign, nonatomic) BOOL                  isScrolling;
 
@@ -74,9 +66,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 // -----
 // @name Subviews
 // -----
-
-// Dark, semi-transparent view to sit above the homescreen
-@property (strong, nonatomic) UIView              *darkenedBackgroundView;
 
 // Label displaying the Sol° logo
 @property (strong, nonatomic) UILabel             *solLogoLabel;
@@ -99,6 +88,9 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 // Paging scroll view to manage weather views
 @property (strong, nonatomic) SOLPagingScrollView *pagingScrollView;
 
+// Dark, semi-transparent view to sit above the homescreen
+@property (strong, nonatomic) UIView              *darkenedBackgroundView;
+
 @end
 
 
@@ -113,7 +105,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
         self.modalTransitionStyle   = UIModalTransitionStyleCoverVertical;
         self.modalPresentationStyle = UIModalPresentationCurrentContext;
         
-        
         // Initialize the weather data dictionary with saved data, if it exists
         NSDictionary *savedWeatherData = [SOLStateManager weatherData];
         if(savedWeatherData) {
@@ -127,75 +118,79 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
         if(savedWeatherTags) {
             self.weatherTags = [NSMutableArray arrayWithArray:savedWeatherTags];
         } else {
-            self.weatherTags = [NSMutableArray arrayWithCapacity:4];
+            self.weatherTags = [NSMutableArray arrayWithCapacity:kMaxNumWeatherViews];
         }
         
-        // Configure Date Formatter
-        self.dateFormatter = [[NSDateFormatter alloc]init];
-        [self.dateFormatter setDateFormat:@"EEE MMM d, h:mm a"];
-        
-        // Initialize and configure the location manager and start updating the user's current location
-        self.locationManager = [CLLocationManager new];
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-        self.locationManager.distanceFilter = 3000;
-        self.locationManager.delegate = self;
+        // Initialize the location manager and start updating the user's current location
+        self.locationManager = ({
+            CLLocationManager *locationManager = [CLLocationManager new];
+            locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+            locationManager.distanceFilter = 3000;
+            locationManager.delegate = self;
+            locationManager;
+        });
         [self.locationManager startUpdatingLocation];
         
-        // Initialize other properties
-        [self initializeViewControllers];
-        [self initializeSubviews];
+        // Initialize the add location view controller
+        self.addLocationViewController = [SOLAddLocationViewController new];
+        self.addLocationViewController.delegate = self;
+        
+        // Initialize the settings view controller
+        self.settingsViewController = [SOLSettingsViewController new];
+        self.settingsViewController.delegate = self;
+
         [self initializeSettingsButton];
         [self initializeAddLocationButton];
         
         // Hide add location button if we have reached the maximum number of views
-        if([self.weatherData count] >= kMAX_NUM_WEATHER_VIEWS) {
+        if([self.weatherData count] >= kMaxNumWeatherViews) {
             self.addLocationButton.hidden = YES;
         }
-        
-        // The blurred overlay view should sit in front of all other subviews
-        [self.view bringSubviewToFront:self.blurredOverlayView];
     }
     return self;
 }
 
 - (void)initializeViewControllers
 {
-    // Initialize the add location view controller
-    self.addLocationViewController = [SOLAddLocationViewController new];
-    self.addLocationViewController.delegate = self;
-    
-    // Initialize the settings view controller
-    self.settingsViewController = [SOLSettingsViewController new];
-    self.settingsViewController.delegate = self;
-}
+    }
 
-- (void)initializeSubviews
+- (void)viewDidLoad
 {
+    [super viewDidLoad];
+    
     // Initialize the darkended background view
-    self.darkenedBackgroundView = [[UIView alloc]initWithFrame:self.view.bounds];
-    [self.darkenedBackgroundView setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
+    self.darkenedBackgroundView = ({
+        UIView *view = [[UIView alloc]initWithFrame:self.view.bounds];
+        view.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+        view;
+    });
     [self.view addSubview:self.darkenedBackgroundView];
     
     // Initialize the Sol° logo label
-    self.solLogoLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 160, 160)];
-    self.solLogoLabel.center = CGPointMake(self.view.center.x, 0.5 * self.view.center.y);
-    self.solLogoLabel.font = [UIFont fontWithName:CLIMACONS_FONT size:200];
-    self.solLogoLabel.backgroundColor = [UIColor clearColor];
-    self.solLogoLabel.textColor = [UIColor whiteColor];
-    self.solLogoLabel.textAlignment = NSTextAlignmentCenter;
-    self.solLogoLabel.text = [NSString stringWithFormat:@"%c", ClimaconSun];
+    self.solLogoLabel = ({
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 160, 160)];
+        label.center = CGPointMake(self.view.center.x, 0.5 * self.view.center.y);
+        label.font = [UIFont fontWithName:CLIMACONS_FONT size:200];
+        label.text = [NSString stringWithFormat:@"%c", ClimaconSun];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.textColor = [UIColor whiteColor];
+        label;
+    });
     [self.view addSubview:self.solLogoLabel];
-
+    
     // Initialize the Sol° title label
-    self.solTitleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 64)];
-    self.solTitleLabel.center = self.view.center;
-    self.solTitleLabel.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:64];
-    self.solTitleLabel.backgroundColor = [UIColor clearColor];
-    self.solTitleLabel.textColor = [UIColor whiteColor];
-    self.solTitleLabel.textAlignment = NSTextAlignmentCenter;
-    self.solTitleLabel.text = @"Sol°";
+    self.solTitleLabel = ({
+        UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 64)];
+        label.center = self.view.center;
+        label.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:64];
+        label.backgroundColor = [UIColor clearColor];
+        label.textColor = [UIColor whiteColor];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = @"Sol°";
+        label;
+    });
     [self.view addSubview:self.solTitleLabel];
-
+    
     // Initialize the paging scroll wiew
     self.pagingScrollView = [[SOLPagingScrollView alloc]initWithFrame:self.view.bounds];
     self.pagingScrollView.delegate = self;
@@ -203,16 +198,23 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     [self.view addSubview:self.pagingScrollView];
     
     // Initialize the page control
-    self.pageControl = [[UIPageControl alloc]initWithFrame: CGRectMake(0, CGRectGetHeight(self.view.bounds) - 32,
-                                                                       CGRectGetWidth(self.view.bounds), 32)];
-    [self.pageControl setHidesForSinglePage:YES];
+    self.pageControl = ({
+        UIPageControl *pageControl = [[UIPageControl alloc]initWithFrame: CGRectMake(0, CGRectGetHeight(self.view.bounds) - 32,
+                                                                                     CGRectGetWidth(self.view.bounds), 32)];
+        pageControl.hidesForSinglePage = YES;
+        pageControl.userInteractionEnabled = NO;
+        pageControl;
+    });
     [self.view addSubview:self.pageControl];
     
-    // Initialize the blurred overlay view
-    self.blurredOverlayView = [[UIImageView alloc]initWithImage:[[UIImage alloc]init]];
-    self.blurredOverlayView.alpha = 0.0;
-    [self.blurredOverlayView setFrame:self.view.bounds];
+    self.blurredOverlayView = ({
+        UIImageView *imageView = [UIImageView new];
+        imageView.frame = self.view.bounds;
+        imageView.alpha = 0.0;
+        imageView;
+    });
     [self.view addSubview:self.blurredOverlayView];
+    [self.view bringSubviewToFront:self.blurredOverlayView];
 }
 
 - (void)initializeAddLocationButton
@@ -243,14 +245,14 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 - (void)initializeLocalWeatherView
 {
     SOLWeatherView *localWeatherView = [[SOLWeatherView alloc]initWithFrame:self.view.bounds];
-    localWeatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDEFAULT_BACKGROUND_GRADIENT]];
+    localWeatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDefaultBackgroundGradientName]];
     localWeatherView.local = YES;
     localWeatherView.delegate = self;
-    localWeatherView.tag = kLOCAL_WEATHER_VIEW_TAG;
+    localWeatherView.tag = kLocalWeatherViewTag;
     [self.pagingScrollView addSubview:localWeatherView];
     self.pageControl.numberOfPages += 1;
     
-    SOLWeatherData *localWeatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:kLOCAL_WEATHER_VIEW_TAG]];
+    SOLWeatherData *localWeatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:kLocalWeatherViewTag]];
     if(localWeatherData) {
         [self updateWeatherView:localWeatherView withData:localWeatherData];
     }
@@ -323,7 +325,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
             SOLWeatherData *weatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:weatherView.tag]];
             
             // Only update if the minimum time for updates has passed
-            if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMIN_TIME_SINCE_UPDATE || !weatherView.hasData) {
+            if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMinTimeBetweenUpdates || !weatherView.hasData) {
                 CZLog(@"SOLMainViewController", @"Updating Weather Data for %@, Time Since: %f", weatherData.placemark.locality, [[NSDate date]timeIntervalSinceDate:weatherData.timestamp]);
                 
                 // If the weather view is already showing data, we need to move the activity indicator
@@ -392,7 +394,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     
     // Save the downloaded data
     [SOLStateManager setWeatherData:self.weatherData];
-    if([self.weatherData count] >= kMAX_NUM_WEATHER_VIEWS) {
+    if([self.weatherData count] >= kMaxNumWeatherViews) {
         self.addLocationButton.hidden = YES;
     }
 }
@@ -408,7 +410,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     weatherView.hasData = YES;
     
     // Set the update time
-    weatherView.updatedLabel.text = [NSString stringWithFormat:@"Updated %@", [self.dateFormatter stringFromDate:data.timestamp]];
+//    weatherView.updatedLabel.text = [NSString stringWithFormat:@"Updated %@", [self.dateFormatter stringFromDate:data.timestamp]];
     
     // Set the current condition icon and description
     weatherView.conditionIconLabel.text         = data.currentSnapshot.icon;
@@ -491,7 +493,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
             SOLWeatherData *weatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:weatherView.tag]];
             
             // Only update weather data if the time since last update has exceeded the minimum time
-            if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMIN_TIME_SINCE_UPDATE || !weatherView.hasData) {
+            if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMinTimeBetweenUpdates || !weatherView.hasData) {
                 CZLog(@"SOLMainViewController", @"Updating Local Weather Data, Time Since: %f", [[NSDate date]timeIntervalSinceDate:weatherData.timestamp]);
                 // If the weather view has data, move the activity indicator to not overall with any labels
                 if(weatherView.hasData) {
