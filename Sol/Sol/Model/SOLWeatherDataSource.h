@@ -12,6 +12,9 @@
 
 @interface SOLWeatherDataSource : NSObject <UIPageViewControllerDataSource>
 
++ (SOLWeatherDataSource *)sharedWeatherDataSource;
+
+
 - (void)updateWeatherDataForWeatherViewController:(SOLWeatherViewController *)weatherViewController
                                        completion:(void (^)(BOOL success))completion;
 

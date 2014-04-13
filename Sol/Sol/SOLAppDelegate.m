@@ -7,8 +7,7 @@
 //
 
 #import "SOLAppDelegate.h"
-#import "SOLMainViewController.h"
-
+#import "SOLWeatherDataSource.h"
 
 #pragma mark - SOLAppDelegate Class Extension
 
@@ -16,6 +15,7 @@
 
 // The initial view controller presented to the user
 @property (nonatomic) SOLMainViewController *mainViewController;
+
 
 @end
 
@@ -31,8 +31,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
     
-    // Initialize main view controller
-    self.mainViewController = [SOLMainViewController new];
+    UIPageViewController *pageViewController = [[UIPageViewController alloc]initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
+    pageViewController.dataSource =
     
     // Set our window's root view controller and make the app window visible
     self.window.rootViewController = self.mainViewController;
@@ -43,15 +43,12 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Stop updating the user's location
-    [self.mainViewController.locationManager stopUpdatingLocation];
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Begin updating the user's location again
-    [self.mainViewController.locationManager startUpdatingLocation];
-    [self.mainViewController updateWeatherData];
+
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

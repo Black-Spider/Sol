@@ -33,11 +33,31 @@ static const CGFloat    kMinTimeBetweenUpdates  = 3600.0;
 
 - (instancetype)init
 {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:@"Cannot initialize singleton SOLWeatherDataSource"
+                                 userInfo:nil];
+}
+
+- (instancetype)_init
+{
     if(self = [super init]) {
         
     }
     return self;
 }
+
++ (SOLWeatherDataSource *)sharedWeatherDataSource
+{
+    static SOLWeatherDataSource *sharedWeatherDataSource = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedWeatherDataSource = [[SOLWeatherDataSource alloc]_init];
+    });
+    return sharedWeatherDataSource;
+}
+
+
+
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController
 {
