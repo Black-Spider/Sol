@@ -83,7 +83,6 @@
 		DD9388E417B6D898004C5F42 /* NSString+Substring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+Substring.h"; path = "Model/Categories/NSString+Substring.h"; sourceTree = "<group>"; };
 		DD9388E517B6D898004C5F42 /* NSString+Substring.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+Substring.m"; path = "Model/Categories/NSString+Substring.m"; sourceTree = "<group>"; };
 		DD93A81A17FA9C12006DD1BC /* Climacons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Climacons.ttf; path = Resources/Fonts/Climacons.ttf; sourceTree = "<group>"; };
-		DD93A82417FA9D28006DD1BC /* CZDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CZDebug.h; path = Model/CZDebug.h; sourceTree = "<group>"; };
 		DDA08E9F17B81135006AC675 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		DDB7B85717ECD17A00857D15 /* SOLStateManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOLStateManager.h; path = Model/SOLStateManager.h; sourceTree = "<group>"; };
 		DDB7B85817ECD17A00857D15 /* SOLStateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLStateManager.m; path = Model/SOLStateManager.m; sourceTree = "<group>"; };
@@ -232,7 +231,6 @@
 			isa = PBXGroup;
 			children = (
 				DDB7B85617EC913300857D15 /* Climacons */,
-				DDB7B85417EC877000857D15 /* Debug */,
 				DD548DE817A9D5AB00E08E29 /* Categories */,
 				DD46272B17ADC3E6000A6A33 /* SOLWeatherData.h */,
 				DD46272C17ADC3E6000A6A33 /* SOLWeatherData.m */,
@@ -272,14 +270,6 @@
 				DD93A81A17FA9C12006DD1BC /* Climacons.ttf */,
 			);
 			name = Fonts;
-			sourceTree = "<group>";
-		};
-		DDB7B85417EC877000857D15 /* Debug */ = {
-			isa = PBXGroup;
-			children = (
-				DD93A82417FA9D28006DD1BC /* CZDebug.h */,
-			);
-			name = Debug;
 			sourceTree = "<group>";
 		};
 		DDB7B85617EC913300857D15 /* Climacons */ = {

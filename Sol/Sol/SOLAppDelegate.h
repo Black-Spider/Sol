@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Comyar Zaheri. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @interface SOLAppDelegate : UIResponder <UIApplicationDelegate>
 

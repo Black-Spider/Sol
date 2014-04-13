@@ -15,7 +15,7 @@
 @interface SOLAppDelegate ()
 
 // The initial view controller presented to the user
-@property (strong, nonatomic) SOLMainViewController *mainViewController;
+@property (nonatomic) SOLMainViewController *mainViewController;
 
 @end
 

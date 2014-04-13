@@ -34,9 +34,6 @@
 /// Control to change the temperature scale
 @property (strong, nonatomic) UISegmentedControl    *temperatureControl;
 
-/// Displays credits for the app
-@property (strong, nonatomic) UILabel               *creditLabel;
-
 @end
 
 #pragma mark - SOLSettingsViewController Implementation
@@ -73,7 +70,6 @@
         
         [self initializeLocationsTableView];
         [self initializeTemperatureControl];
-        [self initializeCreditLabel];
         [self initializeLocationsTableViewTitleLabel];
     }
     return self;
@@ -118,18 +114,6 @@
     [self.temperatureControl setSelectedSegmentIndex:[SOLStateManager temperatureScale]];
     [self.temperatureControl setTintColor:[UIColor whiteColor]];
     [self.view addSubview:self.temperatureControl];
-}
-
-- (void)initializeCreditLabel
-{
-    static const CGFloat fontSize = 16;
-    self.creditLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetHeight(self.view.bounds) - 2.5 * fontSize,
-                                                                self.view.bounds.size.width, 1.5 * fontSize)];
-    [self.creditLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:fontSize]];
-    [self.creditLabel setTextColor:[UIColor whiteColor]];
-    [self.creditLabel setTextAlignment:NSTextAlignmentCenter];
-    [self.creditLabel setText:@"Created by Comyar, for Stephanie"];
-    [self.view addSubview:self.creditLabel];
 }
 
 - (void)initializeLocationsTableViewTitleLabel

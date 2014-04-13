@@ -51,6 +51,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 // Ordered-List of weather tags
 @property (strong, nonatomic) NSMutableArray        *weatherTags;
 
+//
 @property (assign, nonatomic) BOOL                  isScrolling;
 
 // -----
@@ -131,28 +132,15 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
         });
         [self.locationManager startUpdatingLocation];
         
-        // Initialize the add location view controller
+        // Initialize add location and setting view controllers
         self.addLocationViewController = [SOLAddLocationViewController new];
         self.addLocationViewController.delegate = self;
         
-        // Initialize the settings view controller
         self.settingsViewController = [SOLSettingsViewController new];
         self.settingsViewController.delegate = self;
-
-        [self initializeSettingsButton];
-        [self initializeAddLocationButton];
-        
-        // Hide add location button if we have reached the maximum number of views
-        if([self.weatherData count] >= kMaxNumWeatherViews) {
-            self.addLocationButton.hidden = YES;
-        }
     }
     return self;
 }
-
-- (void)initializeViewControllers
-{
-    }
 
 - (void)viewDidLoad
 {
@@ -207,6 +195,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     });
     [self.view addSubview:self.pageControl];
     
+    // Initialize blur overlay view
     self.blurredOverlayView = ({
         UIImageView *imageView = [UIImageView new];
         imageView.frame = self.view.bounds;
@@ -215,41 +204,57 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     });
     [self.view addSubview:self.blurredOverlayView];
     [self.view bringSubviewToFront:self.blurredOverlayView];
-}
-
-- (void)initializeAddLocationButton
-{
-    self.addLocationButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UILabel *plusLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [plusLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:40]];
-    [plusLabel setTextAlignment:NSTextAlignmentCenter];
-    [plusLabel setTextColor:[UIColor whiteColor]];
-    [plusLabel setText:@"+"];
-    [self.addLocationButton addSubview:plusLabel];
-    [self.addLocationButton setFrame:CGRectMake(CGRectGetWidth(self.view.bounds) - 44, CGRectGetHeight(self.view.bounds) - 54, 44, 44)];
-    [self.addLocationButton setShowsTouchWhenHighlighted:YES];
-    [self.addLocationButton addTarget:self action:@selector(addLocationButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    // Initialize add location button
+    self.addLocationButton = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(CGRectGetWidth(self.view.bounds) - 44, CGRectGetHeight(self.view.bounds) - 54, 44, 44);
+        [button addTarget:self action:@selector(addLocationButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        button.showsTouchWhenHighlighted = YES;
+        
+        UILabel *plusLabel = ({
+            UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0.0, 0.0, 44.0, 44.0)];
+            label.font = [UIFont fontWithName:@"HelveticaNeue-UltraLight" size:(0.98 * CGRectGetHeight(label.bounds))];
+            label.textAlignment = NSTextAlignmentCenter;
+            label.textColor = [UIColor whiteColor];
+            label.text = @"+";
+            label;
+        });
+        [button addSubview:plusLabel];
+        
+        button;
+    });
     [self.view addSubview:self.addLocationButton];
-}
-
-- (void)initializeSettingsButton
-{
-    self.settingsButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-    [self.settingsButton setTintColor:[UIColor whiteColor]];
-    [self.settingsButton setFrame:CGRectMake(4, CGRectGetHeight(self.view.bounds) - 48, 44, 44)];
-    [self.settingsButton setShowsTouchWhenHighlighted:YES];
-    [self.settingsButton addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    
+    // Hide add location button if we have reached the maximum number of views
+    if([self.weatherData count] >= kMaxNumWeatherViews) {
+        self.addLocationButton.hidden = YES;
+    }
+    
+    // Initialize settings button
+    self.settingsButton = ({
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeInfoLight];
+        button.frame = CGRectMake(4, CGRectGetHeight(self.view.bounds) - 48, 44, 44);
+        [button addTarget:self action:@selector(settingsButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        button.tintColor = [UIColor whiteColor];
+        button.showsTouchWhenHighlighted = YES;
+        button;
+    });
     [self.view addSubview:self.settingsButton];
 }
 
 - (void)initializeLocalWeatherView
 {
-    SOLWeatherView *localWeatherView = [[SOLWeatherView alloc]initWithFrame:self.view.bounds];
-    localWeatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDefaultBackgroundGradientName]];
-    localWeatherView.local = YES;
-    localWeatherView.delegate = self;
-    localWeatherView.tag = kLocalWeatherViewTag;
+    SOLWeatherView *localWeatherView = ({
+        SOLWeatherView *weatherView = [[SOLWeatherView alloc]initWithFrame:self.view.bounds];
+        weatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDefaultBackgroundGradientName]];
+        weatherView.tag = kLocalWeatherViewTag;
+        weatherView.delegate = self;
+        weatherView.local = YES;
+        weatherView;
+    });
     [self.pagingScrollView addSubview:localWeatherView];
+    
     self.pageControl.numberOfPages += 1;
     
     SOLWeatherData *localWeatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:kLocalWeatherViewTag]];
@@ -283,8 +288,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     [UIView animateWithDuration:0.25 animations: ^ {
         self.blurredOverlayView.alpha = (show)? 1.0 : 0.0;;
     }];
-            
-    CZLog(@"SOLMainViewController", @"Showing Blurred Overlay View");
 }
 
 - (void)setBlurredOverlayImage
@@ -307,8 +310,10 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
                                             maskImage:nil];
         
         dispatch_async(dispatch_get_main_queue(), ^ {
+            
             // Set the blurred overlay view's image with the blurred screenshot
             self.blurredOverlayView.image = blurred;
+            
         });
     });
 }
@@ -317,7 +322,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 
 - (void)updateWeatherData
 {
-    CZLog(@"SOLMainViewController", @"Attempting to update weather data");
     for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
         if(weatherView.local == NO) {
             
@@ -340,12 +344,9 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
                                                                    completion: ^ (SOLWeatherData *data, NSError *error) {
                     if (data) {
                         // Success
-                        CZLog(@"SOLMainViewController", @"Download finished for weather view with tag: %d", weatherView.tag);
                         [self downloadDidFinishWithData:data withTag:weatherView.tag];
                     } else {
                         // Failure
-                        CZLog(@"SOLMainViewController", @"Download failed for weather view with tag: %d", weatherView.tag);
-                        CZLog(@"SOLMainViewController", @"%@", [error localizedDescription]);
                         [self downloadDidFailForWeatherViewWithTag:weatherView.tag];
                     }
                     [self setBlurredOverlayImage];
@@ -360,7 +361,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 
 - (void)downloadDidFailForWeatherViewWithTag:(NSInteger)tag
 {
-    CZLog(@"SOLMainViewController", @"Download failed for weather view with tag: %d", tag);
     
     for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
         if(weatherView.tag == tag) {
@@ -380,11 +380,10 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 
 - (void)downloadDidFinishWithData:(SOLWeatherData *)data withTag:(NSInteger)tag
 {
-    CZLog(@"SOLMainViewController", @"Download finished for weather view with tag: %d", tag);
     
     for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
         if(weatherView.tag == tag) {
-            [self.weatherData setObject:data forKey:[NSNumber numberWithInt:tag]];
+            [self.weatherData setObject:data forKey:[NSNumber numberWithInteger:tag]];
             
             // Update the weather view with the downloaded data
             [self updateWeatherView:weatherView withData:data];
@@ -573,7 +572,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
         // Create a weather view for the newly added location
         SOLWeatherView *weatherView = [[SOLWeatherView alloc]initWithFrame:self.view.bounds];
         weatherView.delegate = self;
-        weatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDEFAULT_BACKGROUND_GRADIENT]];
+        weatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDefaultBackgroundGradientName]];
         [weatherView setLocal:NO];
         [weatherView setTag:placemark.locality.hash];
         [weatherView.activityIndicator startAnimating];
@@ -587,12 +586,9 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
         [[SOLWundergroundDownloader sharedDownloader]dataForPlacemark:placemark withTag:weatherView.tag completion:^(SOLWeatherData *data, NSError *error) {
             if (data) {
                 // Success
-                CZLog(@"SOLMainViewController", @"Download finished for weather view with tag: %d", weatherView.tag);
                 [self downloadDidFinishWithData:data withTag:weatherView.tag];
             } else {
                 // Failure
-                CZLog(@"SOLMainViewController", @"Download failed for weather view with tag: %d", weatherView.tag);
-                CZLog(@"SOLMainViewController", @"%@", [error localizedDescription]);
                 [self downloadDidFailForWeatherViewWithTag:weatherView.tag];
             }
             [self setBlurredOverlayImage];
@@ -600,7 +596,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     }
     
     // Hide the add location button if the number of weather views is greater than or equal to the max
-    if([self.pagingScrollView.subviews count] >= kMAX_NUM_WEATHER_VIEWS) {
+    if([self.pagingScrollView.subviews count] >= kMaxNumWeatherViews) {
         self.addLocationButton.hidden = YES;
     }
 }
@@ -625,7 +621,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     // Prepare the data (location name, tag) needed by the settings view controller
     NSMutableArray *locations = [[NSMutableArray alloc]initWithCapacity:4];
     for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
-        if(weatherView.tag != kLOCAL_WEATHER_VIEW_TAG) {
+        if(weatherView.tag != kLocalWeatherViewTag) {
             NSArray *locationMetaData = @[weatherView.locationLabel.text, [NSNumber numberWithInteger:weatherView.tag]];
             [locations addObject:locationMetaData];
         }
@@ -653,8 +649,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 
 - (void)didMoveWeatherViewAtIndex:(NSInteger)sourceIndex toIndex:(NSInteger)destinationIndex
 {
-    CZLog(@"SOLMainViewController", @"Moved Weather Tag at Index %d to Index %d", sourceIndex, destinationIndex);
-    
     NSNumber *weatherTag = [self.weatherTags objectAtIndex:sourceIndex];
     [self.weatherTags removeObjectAtIndex:sourceIndex];
     [self.weatherTags insertObject:weatherTag atIndex:destinationIndex];
@@ -664,7 +658,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     
     // If there is a local weather view, we must increment the sourceIndex and destinationIndex to
     // compensate. Checking for the local weather view's data is a simple way of checking for the local weather view
-    if([self.weatherData objectForKey:[NSNumber numberWithInteger:kLOCAL_WEATHER_VIEW_TAG]]) {
+    if([self.weatherData objectForKey:[NSNumber numberWithInteger:kLocalWeatherViewTag]]) {
         destinationIndex += 1;
     }
     
@@ -680,8 +674,6 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 
 - (void)didRemoveWeatherViewWithTag:(NSInteger)tag
 {
-    CZLog(@"SOLMainViewController", @"Removed Weather View with Tag: %d", tag);
-    
     // Find the weather view to remove
     for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
         if(weatherView.tag == tag) {
@@ -697,7 +689,7 @@ static NSString * const kDefaultBackgroundGradientName = @"gradient5";
     [self.weatherTags removeObject:[NSNumber numberWithInteger:tag]];
     
     // Show the add location button if the remaining number of weather views is below the max
-    if([self.weatherData count] < kMAX_NUM_WEATHER_VIEWS) {
+    if([self.weatherData count] < kMaxNumWeatherViews) {
         self.addLocationButton.hidden = NO;
     }
     
