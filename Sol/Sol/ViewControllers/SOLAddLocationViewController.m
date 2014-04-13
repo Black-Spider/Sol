@@ -105,7 +105,6 @@
 
 - (void)doneButtonPressed
 {
-    CZLog(@"SOLAddLocationViewController", @"Done Button Pressed");
     [self.delegate dismissAddLocationViewController];
 }
 

@@ -137,22 +137,6 @@
     });
     [self.view addSubview:self.solTitleLabel];
     
-    // Initialize the paging scroll wiew
-    self.pagingScrollView = [[SOLPagingScrollView alloc]initWithFrame:self.view.bounds];
-    self.pagingScrollView.delegate = self;
-    self.pagingScrollView.bounces = NO;
-    [self.view addSubview:self.pagingScrollView];
-    
-    // Initialize the page control
-    self.pageControl = ({
-        UIPageControl *pageControl = [[UIPageControl alloc]initWithFrame: CGRectMake(0, CGRectGetHeight(self.view.bounds) - 32,
-                                                                                     CGRectGetWidth(self.view.bounds), 32)];
-        pageControl.hidesForSinglePage = YES;
-        pageControl.userInteractionEnabled = NO;
-        pageControl;
-    });
-    [self.view addSubview:self.pageControl];
-    
     // Initialize blur overlay view
     self.blurredOverlayView = ({
         UIImageView *imageView = [UIImageView new];
@@ -184,11 +168,6 @@
     });
     [self.view addSubview:self.addLocationButton];
     
-    // Hide add location button if we have reached the maximum number of views
-    if([self.weatherData count] >= kMaxNumWeatherViews) {
-        self.addLocationButton.hidden = YES;
-    }
-    
     // Initialize settings button
     self.settingsButton = ({
         UIButton *button = [UIButton buttonWithType:UIButtonTypeInfoLight];
@@ -199,44 +178,6 @@
         button;
     });
     [self.view addSubview:self.settingsButton];
-}
-
-- (void)initializeLocalWeatherView
-{
-    SOLWeatherView *localWeatherView = ({
-        SOLWeatherView *weatherView = [[SOLWeatherView alloc]initWithFrame:self.view.bounds];
-        
-        weatherView.tag = kLocalWeatherViewTag;
-        weatherView.delegate = self;
-        weatherView.local = YES;
-        weatherView;
-    });
-    [self.pagingScrollView addSubview:localWeatherView];
-    
-    self.pageControl.numberOfPages += 1;
-    
-    SOLWeatherData *localWeatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:kLocalWeatherViewTag]];
-    if(localWeatherData) {
-        [self updateWeatherView:localWeatherView withData:localWeatherData];
-    }
-}
-
-- (void)initializeNonlocalWeatherViews
-{
-    for(NSNumber *tagNumber in self.weatherTags) {
-        // Initialize a new weather view for all weather data not belonging to the local weather view
-        SOLWeatherData *weatherData = [self.weatherData objectForKey:tagNumber];
-        if(weatherData) {
-            SOLWeatherView *weatherView = [[SOLWeatherView alloc]initWithFrame:self.view.bounds];
-            weatherView.delegate = self;
-            weatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"gradient5.png"]];
-            weatherView.tag = tagNumber.integerValue;
-            weatherView.local = NO;
-            self.pageControl.numberOfPages += 1;
-            [self.pagingScrollView addSubview:weatherView isLaunch:YES];
-            [self updateWeatherView:weatherView withData:weatherData];
-        }
-    }
 }
 
 #pragma mark Using a SOLMainViewController
@@ -280,77 +221,77 @@
 
 - (void)updateWeatherData
 {
-    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
-        if(weatherView.local == NO) {
-            
-            // Only update non local weather data
-            SOLWeatherData *weatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:weatherView.tag]];
-            
-            // Only update if the minimum time for updates has passed
-            if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMinTimeBetweenUpdates || !weatherView.hasData) {
-                
-                // If the weather view is already showing data, we need to move the activity indicator
-                if(weatherView.hasData) {
-                    weatherView.activityIndicator.center = CGPointMake(weatherView.center.x, 1.8 * weatherView.center.y);
-                }
-                [weatherView.activityIndicator startAnimating];
-                
-                // Make the data download request, Block based
-                [[SOLWundergroundDownloader sharedDownloader]dataForPlacemark:weatherData.placemark
-                                                                      withTag:weatherView.tag
-                                                                   completion: ^ (SOLWeatherData *data, NSError *error) {
-                    if (data) {
-                        // Success
-                        [self downloadDidFinishWithData:data withTag:weatherView.tag];
-                    } else {
-                        // Failure
-                        [self downloadDidFailForWeatherViewWithTag:weatherView.tag];
-                    }
-                    [self setBlurredOverlayImage];
-                }];
-                
-            }
-        }
-    }
+//    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
+//        if(weatherView.local == NO) {
+//            
+//            // Only update non local weather data
+//            SOLWeatherData *weatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:weatherView.tag]];
+//            
+//            // Only update if the minimum time for updates has passed
+//            if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMinTimeBetweenUpdates || !weatherView.hasData) {
+//                
+//                // If the weather view is already showing data, we need to move the activity indicator
+//                if(weatherView.hasData) {
+//                    weatherView.activityIndicator.center = CGPointMake(weatherView.center.x, 1.8 * weatherView.center.y);
+//                }
+//                [weatherView.activityIndicator startAnimating];
+//                
+//                // Make the data download request, Block based
+//                [[SOLWundergroundDownloader sharedDownloader]dataForPlacemark:weatherData.placemark
+//                                                                      withTag:weatherView.tag
+//                                                                   completion: ^ (SOLWeatherData *data, NSError *error) {
+//                    if (data) {
+//                        // Success
+//                        [self downloadDidFinishWithData:data withTag:weatherView.tag];
+//                    } else {
+//                        // Failure
+//                        [self downloadDidFailForWeatherViewWithTag:weatherView.tag];
+//                    }
+//                    [self setBlurredOverlayImage];
+//                }];
+//                
+//            }
+//        }
+//    }
 }
 
 - (void)downloadDidFailForWeatherViewWithTag:(NSInteger)tag
 {
     
-    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
-        if(weatherView.tag == tag) {
-            
-            // If the weather view doesn't have any data, show a failure message
-            if(!weatherView.hasData) {
-                weatherView.conditionIconLabel.text = @"☹";
-                weatherView.conditionDescriptionLabel.text = @"Update Failed";
-                weatherView.locationLabel.text = @"Check your network connection";
-            }
-            
-            // Stop the weather view's activity indicator
-            [weatherView.activityIndicator stopAnimating];
-        }
-    }
+//    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
+//        if(weatherView.tag == tag) {
+//            
+//            // If the weather view doesn't have any data, show a failure message
+//            if(!weatherView.hasData) {
+//                weatherView.conditionIconLabel.text = @"☹";
+//                weatherView.conditionDescriptionLabel.text = @"Update Failed";
+//                weatherView.locationLabel.text = @"Check your network connection";
+//            }
+//            
+//            // Stop the weather view's activity indicator
+//            [weatherView.activityIndicator stopAnimating];
+//        }
+//    }
 }
 
 - (void)downloadDidFinishWithData:(SOLWeatherData *)data withTag:(NSInteger)tag
 {
-    
-    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
-        if(weatherView.tag == tag) {
-            [self.weatherData setObject:data forKey:[NSNumber numberWithInteger:tag]];
-            
-            // Update the weather view with the downloaded data
-            [self updateWeatherView:weatherView withData:data];
-            [weatherView.activityIndicator stopAnimating];
-        }
-    }
-    
-    // Save the downloaded data
-    [SOLStateManager setWeatherData:self.weatherData];
-    if([self.weatherData count] >= kMaxNumWeatherViews) {
-        self.addLocationButton.hidden = YES;
-    }
+//    
+//    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
+//        if(weatherView.tag == tag) {
+//            [self.weatherData setObject:data forKey:[NSNumber numberWithInteger:tag]];
+//            
+//            // Update the weather view with the downloaded data
+//            [self updateWeatherView:weatherView withData:data];
+//            [weatherView.activityIndicator stopAnimating];
+//        }
+//    }
+//    
+//    // Save the downloaded data
+//    [SOLStateManager setWeatherData:self.weatherData];
+//    if([self.weatherData count] >= kMaxNumWeatherViews) {
+//        self.addLocationButton.hidden = YES;
+//    }
 }
 
 - (void)updateWeatherView:(SOLWeatherView *)weatherView withData:(SOLWeatherData *)data
@@ -358,8 +299,6 @@
     if(!data) {
         return;
     }
-    
-    CZLog(@"SOLMainViewController", @"Updating labels for weather view with tag: %d", weatherView.tag);
     
     weatherView.hasData = YES;
     
@@ -415,86 +354,85 @@
 
 #pragma mark CLLocationManagerDelegate Methods
 
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
-{
-    // Only add the local weather view if location services authorized
-    if(status == kCLAuthorizationStatusAuthorized) {
-        CZLog(@"SOLMainViewController", @"Location Services Authorized");
-        [self initializeLocalWeatherView];
-        [self initializeNonlocalWeatherViews];
-        [self setBlurredOverlayImage];
-        [self updateWeatherData];
-    } else if(status != kCLAuthorizationStatusNotDetermined) {
-        CZLog(@"SOLMainViewController", @"Location Services Authorization Not Determined");
-        [self initializeNonlocalWeatherViews];
-        [self setBlurredOverlayImage];
-        [self updateWeatherData];
-    } else if(status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
-        CZLog(@"SOLMainViewController", @"Location Services Denied");
-        // If location services are disabled and no saved weather data is found, show the add location view controller
-        if([self.pagingScrollView.subviews count] == 0) {
-            [self presentViewController:self.addLocationViewController animated:YES completion:nil];
-        }
-    }
-}
+//- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+//{
+//    // Only add the local weather view if location services authorized
+//    if(status == kCLAuthorizationStatusAuthorized) {
+//        CZLog(@"SOLMainViewController", @"Location Services Authorized");
+//        [self initializeLocalWeatherView];
+//        [self initializeNonlocalWeatherViews];
+//        [self setBlurredOverlayImage];
+//        [self updateWeatherData];
+//    } else if(status != kCLAuthorizationStatusNotDetermined) {
+//        CZLog(@"SOLMainViewController", @"Location Services Authorization Not Determined");
+//        [self initializeNonlocalWeatherViews];
+//        [self setBlurredOverlayImage];
+//        [self updateWeatherData];
+//    } else if(status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted) {
+//        CZLog(@"SOLMainViewController", @"Location Services Denied");
+//        // If location services are disabled and no saved weather data is found, show the add location view controller
+//        if([self.pagingScrollView.subviews count] == 0) {
+//            [self presentViewController:self.addLocationViewController animated:YES completion:nil];
+//        }
+//    }
+//}
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    CZLog(@"SOLMainViewController", @"Location Manager Updated Location");
-    // Download new weather data for the local weather view
-    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
-        if(weatherView.local == YES) {
-            SOLWeatherData *weatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:weatherView.tag]];
-            
-            // Only update weather data if the time since last update has exceeded the minimum time
-            if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMinTimeBetweenUpdates || !weatherView.hasData) {
-                CZLog(@"SOLMainViewController", @"Updating Local Weather Data, Time Since: %f", [[NSDate date]timeIntervalSinceDate:weatherData.timestamp]);
-                // If the weather view has data, move the activity indicator to not overall with any labels
-                if(weatherView.hasData) {
-                    weatherView.activityIndicator.center = CGPointMake(weatherView.center.x, 1.8 * weatherView.center.y);
-                }
-                [weatherView.activityIndicator startAnimating];
-                
-                // Initiate download request
-                [[SOLWundergroundDownloader sharedDownloader]dataForLocation:[locations lastObject] withTag:weatherView.tag completion:^(SOLWeatherData *data, NSError *error) {
-                    
-                    if (data) {
-                        // Success
-                        CZLog(@"SOLMainViewController", @"Download finished for weather view with tag: %d", weatherView.tag);
-                        [self downloadDidFinishWithData:data withTag:weatherView.tag];
-                    } else {
-                        // Failure
-                        CZLog(@"SOLMainViewController", @"Download failed for weather view with tag: %d", weatherView.tag);
-                        CZLog(@"SOLMainViewController", @"%@", [error localizedDescription]);
-                        [self downloadDidFailForWeatherViewWithTag:weatherView.tag];
-                    }
-                }];
-            } else {
-                CZLog(@"SOLMainViewController", @"Not Updating Local Weather Data, Time Since: %f", [[NSDate date]timeIntervalSinceDate:weatherData.timestamp]);
-            }
-        }
-    }
-}
+//- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+//{
+//    CZLog(@"SOLMainViewController", @"Location Manager Updated Location");
+//    // Download new weather data for the local weather view
+//    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
+//        if(weatherView.local == YES) {
+//            SOLWeatherData *weatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:weatherView.tag]];
+//            
+//            // Only update weather data if the time since last update has exceeded the minimum time
+//            if([[NSDate date]timeIntervalSinceDate:weatherData.timestamp] >= kMinTimeBetweenUpdates || !weatherView.hasData) {
+//                CZLog(@"SOLMainViewController", @"Updating Local Weather Data, Time Since: %f", [[NSDate date]timeIntervalSinceDate:weatherData.timestamp]);
+//                // If the weather view has data, move the activity indicator to not overall with any labels
+//                if(weatherView.hasData) {
+//                    weatherView.activityIndicator.center = CGPointMake(weatherView.center.x, 1.8 * weatherView.center.y);
+//                }
+//                [weatherView.activityIndicator startAnimating];
+//                
+//                // Initiate download request
+//                [[SOLWundergroundDownloader sharedDownloader]dataForLocation:[locations lastObject] withTag:weatherView.tag completion:^(SOLWeatherData *data, NSError *error) {
+//                    
+//                    if (data) {
+//                        // Success
+//                        CZLog(@"SOLMainViewController", @"Download finished for weather view with tag: %d", weatherView.tag);
+//                        [self downloadDidFinishWithData:data withTag:weatherView.tag];
+//                    } else {
+//                        // Failure
+//                        CZLog(@"SOLMainViewController", @"Download failed for weather view with tag: %d", weatherView.tag);
+//                        CZLog(@"SOLMainViewController", @"%@", [error localizedDescription]);
+//                        [self downloadDidFailForWeatherViewWithTag:weatherView.tag];
+//                    }
+//                }];
+//            } else {
+//                CZLog(@"SOLMainViewController", @"Not Updating Local Weather Data, Time Since: %f", [[NSDate date]timeIntervalSinceDate:weatherData.timestamp]);
+//            }
+//        }
+//    }
+//}
 
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-    CZLog(@"SOLMainViewController", @"Failed Location Update");
-    
-    // If the local weather view has no data and a location could not be determined, show a failure message
-    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
-        if(weatherView.local == YES && !weatherView.hasData) {
-            weatherView.conditionIconLabel.text = @"☹";
-            weatherView.conditionDescriptionLabel.text = @"Update Failed";
-            weatherView.locationLabel.text = @"Check your network connection";
-        }
-    }
-}
+//- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+//{
+//    CZLog(@"SOLMainViewController", @"Failed Location Update");
+//    
+//    // If the local weather view has no data and a location could not be determined, show a failure message
+//    for(SOLWeatherView *weatherView in self.pagingScrollView.subviews) {
+//        if(weatherView.local == YES && !weatherView.hasData) {
+//            weatherView.conditionIconLabel.text = @"☹";
+//            weatherView.conditionDescriptionLabel.text = @"Update Failed";
+//            weatherView.locationLabel.text = @"Check your network connection";
+//        }
+//    }
+//}
 
 #pragma mark AddLocationButton Methods
 
 - (void)addLocationButtonPressed
 {
-    CZLog(@"SOLMainViewController", @"Add Location Button Pressed");
 
     // Only show the blurred overlay view if weather views have been added
     if([self.pagingScrollView.subviews count] > 0) {
@@ -516,10 +454,10 @@
 
 - (void)didAddLocationWithPlacemark:(CLPlacemark *)placemark
 {
-    CZLog(@"SOLMainViewController", @"Adding Weather View for Location %@", placemark.locality);
+//    CZLog(@"SOLMainViewController", @"Adding Weather View for Location %@", placemark.locality);
     
     // Get cached weather data for the added placemark if it exists
-    SOLWeatherData *weatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:placemark.locality.hash]];
+//    SOLWeatherData *weatherData = [self.weatherData objectForKey:[NSNumber numberWithInteger:placemark.locality.hash]];
     
     // Only add a location if it is does not already exist
     if(!weatherData) {
@@ -527,15 +465,15 @@
         // Create a weather view for the newly added location
         SOLWeatherView *weatherView = [[SOLWeatherView alloc]initWithFrame:self.view.bounds];
         weatherView.delegate = self;
-        weatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDefaultBackgroundGradientName]];
+//        weatherView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:kDefaultBackgroundGradientName]];
         [weatherView setLocal:NO];
         [weatherView setTag:placemark.locality.hash];
         [weatherView.activityIndicator startAnimating];
-
-        self.pageControl.numberOfPages += 1;
-        [self.pagingScrollView addSubview:weatherView isLaunch:NO];
-        [self.weatherTags addObject:[NSNumber numberWithInteger:weatherView.tag]];
-        [SOLStateManager setWeatherTags:self.weatherTags];
+//
+//        self.pageControl.numberOfPages += 1;
+//        [self.pagingScrollView addSubview:weatherView isLaunch:NO];
+//        [self.weatherTags addObject:[NSNumber numberWithInteger:weatherView.tag]];
+//        [SOLStateManager setWeatherTags:self.weatherTags];
         
         // Download weather data for the newly created weather view
         [[SOLWundergroundDownloader sharedDownloader]dataForPlacemark:placemark withTag:weatherView.tag completion:^(SOLWeatherData *data, NSError *error) {
@@ -551,14 +489,13 @@
     }
     
     // Hide the add location button if the number of weather views is greater than or equal to the max
-    if([self.pagingScrollView.subviews count] >= kMaxNumWeatherViews) {
-        self.addLocationButton.hidden = YES;
-    }
+//    if([self.pagingScrollView.subviews count] >= kMaxNumWeatherViews) {
+//        self.addLocationButton.hidden = YES;
+//    }
 }
 
 - (void)dismissAddLocationViewController
 {
-    CZLog(@"SOLMainViewController", @"Dismissing Add Location View Controller");
     [self showBlurredOverlayView:NO];
     [UIView animateWithDuration:0.3 animations: ^ {
         self.solLogoLabel.alpha   = 1.0;
@@ -571,7 +508,6 @@
 
 - (void)settingsButtonPressed
 {
-    CZLog(@"SOLMainViewController", @"Settings Button Pressed");
     
     // Prepare the data (location name, tag) needed by the settings view controller
     NSMutableArray *locations = [[NSMutableArray alloc]initWithCapacity:4];

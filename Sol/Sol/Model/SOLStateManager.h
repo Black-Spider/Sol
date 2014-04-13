@@ -20,9 +20,9 @@ typedef enum {
  */
 @interface SOLStateManager : NSObject
 
-/////////////////////////////////////////////////////////////////////////////
-/// @name Using the State Manager
-/////////////////////////////////////////////////////////////////////////////
+// -----
+// @name Using the State Manager
+// -----
 
 /**
  Get the saved temperature scale
@@ -59,5 +59,9 @@ typedef enum {
  @param weatherTags List of weather tags
  */
 + (void)setWeatherTags:(NSArray *)weatherTags;
+
++ (NSArray *)weatherViewControllers;
+
++ (void)setWeatherViewControllers:(NSArray *)weatherViewControllers;
 
 @end

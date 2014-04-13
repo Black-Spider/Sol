@@ -14,28 +14,27 @@
 // Minimum time between each weather data update
 static const CGFloat    kMinTimeBetweenUpdates  = 3600.0;
 
+#pragma mark - SOLWeatherDataSource Class Extension
 
 @interface SOLWeatherDataSource ()
 
-@property (nonatomic) NSArray *viewControllers;
+//
+@property (nonatomic) NSMutableArray *viewControllers;
 
 // Dictionary of all weather data being managed by the app
 @property (nonatomic) NSMutableDictionary   *weatherData;
 
 @end
 
+
+#pragma mark - SOLWeatherDataSource Implementation
+
 @implementation SOLWeatherDataSource
 
 - (instancetype)init
 {
     if(self = [super init]) {
-        // Initialize the weather data dictionary with saved data, if it exists
-        NSDictionary *savedWeatherData = [SOLStateManager weatherData];
-        if(savedWeatherData) {
-            self.weatherData = [NSMutableDictionary dictionaryWithDictionary:savedWeatherData];
-        } else {
-            self.weatherData = [NSMutableDictionary dictionaryWithCapacity:5];
-        }
+        
     }
     return self;
 }

@@ -54,4 +54,20 @@
     [[NSUserDefaults standardUserDefaults]setObject:encodedWeatherTags forKey:@"weather_tags"];
 }
 
+
++ (NSArray *)weatherViewControllers
+{
+    NSData *encodedWeatherViewControllers = [[NSUserDefaults standardUserDefaults]objectForKey:@"weather_view_controllers"];
+    if(encodedWeatherViewControllers) {
+        return (NSArray *)[NSKeyedUnarchiver unarchiveObjectWithData:encodedWeatherViewControllers];
+    }
+    return nil;
+}
+
++ (void)setWeatherViewControllers:(NSArray *)weatherViewControllers
+{
+    NSData *encodedWeatherViewControllers = [NSKeyedArchiver archivedDataWithRootObject:weatherViewControllers];
+    [[NSUserDefaults standardUserDefaults]setObject:encodedWeatherViewControllers forKey:@"weather_view_controllers"];
+}
+
 @end

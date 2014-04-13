@@ -23,7 +23,6 @@
 		DD4F969817A8994300E0E7D0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = DD4F969617A8994300E0E7D0 /* InfoPlist.strings */; };
 		DD4F969A17A8994300E0E7D0 /* SolTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DD4F969917A8994300E0E7D0 /* SolTests.m */; };
 		DD548DE317A8A95800E08E29 /* SOLMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DD548DE217A8A95800E08E29 /* SOLMainViewController.m */; };
-		DD548DE717A8ADCC00E08E29 /* SOLPagingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = DD548DE617A8ADCC00E08E29 /* SOLPagingScrollView.m */; };
 		DD677B8D17EEE5AC0078F41A /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD677B8C17EEE5AC0078F41A /* MapKit.framework */; };
 		DD9388E617B6D898004C5F42 /* NSString+Substring.m in Sources */ = {isa = PBXBuildFile; fileRef = DD9388E517B6D898004C5F42 /* NSString+Substring.m */; };
 		DD9388F017B6DDA8004C5F42 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD0C344117B517950024AD9A /* SystemConfiguration.framework */; };
@@ -77,8 +76,6 @@
 		DD4F969917A8994300E0E7D0 /* SolTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SolTests.m; sourceTree = "<group>"; };
 		DD548DE117A8A95800E08E29 /* SOLMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOLMainViewController.h; path = ViewControllers/SOLMainViewController.h; sourceTree = "<group>"; };
 		DD548DE217A8A95800E08E29 /* SOLMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLMainViewController.m; path = ViewControllers/SOLMainViewController.m; sourceTree = "<group>"; };
-		DD548DE517A8ADCC00E08E29 /* SOLPagingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SOLPagingScrollView.h; path = Views/SOLPagingScrollView.h; sourceTree = "<group>"; };
-		DD548DE617A8ADCC00E08E29 /* SOLPagingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SOLPagingScrollView.m; path = Views/SOLPagingScrollView.m; sourceTree = "<group>"; };
 		DD677B8C17EEE5AC0078F41A /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		DD8AA01517D52B2E00D4F7BA /* Climacons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Climacons.h; path = Model/Climacons.h; sourceTree = "<group>"; };
 		DD8AA01817D533BA00D4F7BA /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -254,8 +251,6 @@
 		DD548DE017A8A92700E08E29 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				DD548DE517A8ADCC00E08E29 /* SOLPagingScrollView.h */,
-				DD548DE617A8ADCC00E08E29 /* SOLPagingScrollView.m */,
 				DD46272817ADC3A1000A6A33 /* SOLWeatherView.h */,
 				DD46272917ADC3A1000A6A33 /* SOLWeatherView.m */,
 			);
@@ -409,7 +404,6 @@
 				DD46272D17ADC3E6000A6A33 /* SOLWeatherData.m in Sources */,
 				DDDC92E618FA571600D39A74 /* SOLWeatherViewController.m in Sources */,
 				DD4F968117A8994300E0E7D0 /* main.m in Sources */,
-				DD548DE717A8ADCC00E08E29 /* SOLPagingScrollView.m in Sources */,
 				DD4F968517A8994300E0E7D0 /* SOLAppDelegate.m in Sources */,
 				DDBFDDCD17B286B7002A886D /* SOLWundergroundDownloader.m in Sources */,
 				DDB7B8EB17ED516500857D15 /* SOLSettingsViewController.m in Sources */,
