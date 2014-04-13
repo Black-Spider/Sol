@@ -12,9 +12,11 @@
 // Name of the default gradient image file
 static NSString * const kDefaultBackgroundGradientName = @"gradient5";
 
-
 @interface SOLWeatherViewController ()
+
+//
 @property (nonatomic) SOLWeatherView *weatherView;
+
 @end
 
 @implementation SOLWeatherViewController

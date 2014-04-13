@@ -22,9 +22,6 @@
 // Light-Colored ribbon to display temperatures and forecasts on
 @property (nonatomic) UIView                    *ribbon;
 
-// Used to drag the weather view content vertically
-@property (nonatomic) UIPanGestureRecognizer    *panGestureRecognizer;
-
 // Displays the time the weather data for this view was last updated
 @property (nonatomic) UILabel                   *updatedLabel;
 
@@ -84,12 +81,6 @@
         [self.ribbon setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:0.25]];
         [self.container addSubview:self.ribbon];
         
-        // Initialize Pan Gesture Recognizer
-        self.panGestureRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(didPan:)];
-        self.panGestureRecognizer.minimumNumberOfTouches = 1;
-        self.panGestureRecognizer.delegate = self;
-        [self.container addGestureRecognizer:self.panGestureRecognizer];
-        
         // Initialize Activity Indicator
         self.activityIndicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         self.activityIndicator.center = self.center;
@@ -123,50 +114,6 @@
     
     [self.conditionIconLabel addMotionEffect:verticalInterpolation];
     [self.conditionIconLabel addMotionEffect:horizontalInterpolation];
-}
-
-#pragma mark Pan Gesture Recognizer Methods
-
-- (void)didPan:(UIPanGestureRecognizer *)gestureRecognizer
-{
-    static CGFloat initialCenterY = 0.0;
-    CGPoint translatedPoint = [gestureRecognizer translationInView:self.container];
-    if(gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        
-        // Save the inital Y to reuse later
-        initialCenterY = self.container.center.y;
-        
-    } else if(gestureRecognizer.state == UIGestureRecognizerStateEnded) {
-
-        
-        // Return the container back to its original position
-        [UIView animateWithDuration:0.3 animations: ^ {
-            self.container.center = CGPointMake(self.container.center.x, initialCenterY);
-        }];
-        
-    } else if(translatedPoint.y <= 50 && translatedPoint.y > 0) {
-        // Translate the container
-        self.container.center = CGPointMake(self.container.center.x, self.center.y + translatedPoint.y);
-    }
-}
-
-#pragma mark UIGestureRecognizerDelegate Methods
-
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-    if([gestureRecognizer isKindOfClass:[UIPanGestureRecognizer class]]) {
-        // We only want to register vertial pans
-        UIPanGestureRecognizer *panGestureRecognizer = (UIPanGestureRecognizer *)gestureRecognizer;
-        CGPoint velocity = [panGestureRecognizer velocityInView:self.container];
-        return fabsf(velocity.y) > fabsf(velocity.x);
-    }
-    return YES;
-}
-
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return YES;
 }
 
 #pragma mark Label Initialization Methods

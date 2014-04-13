@@ -49,7 +49,7 @@ static const CGFloat    kMinTimeBetweenUpdates  = 3600.0;
     return nil;
 }
 
-- (void)updateWeatherDataWithCompletion:(void (^)(BOOL))completion
+- (void)updateWeatherDataForWeatherViewController:(SOLWeatherViewController *)weatherViewController completion:(void (^)(BOOL success))completion
 {
     
 }

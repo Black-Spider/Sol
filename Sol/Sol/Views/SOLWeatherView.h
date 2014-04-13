@@ -18,12 +18,6 @@
 // @name Properties
 // -----
 
-// YES if view contains weather data
-@property (assign, nonatomic)                       BOOL    hasData;
-
-// YES if view contains local weather data
-@property (assign, nonatomic, getter = isLocal)     BOOL    local;
-
 // Displays the time the weather data for this view was last updated
 @property (nonatomic, readonly) UILabel *updatedLabel;
 

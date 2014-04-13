@@ -8,9 +8,11 @@
 
 @import UIKit;
 @import Foundation;
+@class SOLWeatherViewController;
 
 @interface SOLWeatherDataSource : NSObject <UIPageViewControllerDataSource>
 
-- (void)updateWeatherDataWithCompletion:(void (^)(BOOL))completion;
+- (void)updateWeatherDataForWeatherViewController:(SOLWeatherViewController *)weatherViewController
+                                       completion:(void (^)(BOOL success))completion;
 
 @end

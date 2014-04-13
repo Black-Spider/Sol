@@ -12,9 +12,6 @@
 // View controllers
 #import "SOLMainViewController.h"
 
-// Views
-#import "SOLPagingScrollView.h"
-
 // Models
 #import "SOLStateManager.h"
 #import "SOLWeatherData.h"
