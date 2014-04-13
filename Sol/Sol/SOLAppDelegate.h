@@ -10,11 +10,7 @@
 
 @interface SOLAppDelegate : UIResponder <UIApplicationDelegate>
 
-/////////////////////////////////////////////////////////////////////////////
-/// @name Properties
-/////////////////////////////////////////////////////////////////////////////
-
-/// App window
-@property (strong, nonatomic) UIWindow *window;
+// App window
+@property (nonatomic) UIWindow *window;
 
 @end
